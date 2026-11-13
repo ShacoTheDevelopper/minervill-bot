@@ -33,7 +33,13 @@ function loadConfig() {
       strategy: process.env.STRATEGY || "max",
     };
   }
-  return JSON.parse(fs.readFileSync("config.json", "utf-8"));
+  try {
+    return JSON.parse(fs.readFileSync("config.json", "utf-8"));
+  } catch {
+    console.error("No PRIVATE_KEY env var and no config.json found.");
+    console.error("Set PRIVATE_KEY in Railway Variables tab.");
+    process.exit(1);
+  }
 }
 
 function uuid() { return crypto.randomUUID(); }
